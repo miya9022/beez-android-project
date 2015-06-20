@@ -51,11 +51,10 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 	private Queue<NewsBeez> QueueDisplay = null;
 	private int concurrent = 0;
 	
-	private boolean isTop = true;
+	private boolean isLastPage = false;
 	private boolean nomoreData = false;
-	private boolean isScrollUp = true;
 	private ImageButton imgb_scrolltop;
-	private int page = 0;
+	private int page = 1;
 	
 	private final String default_img_url = "http://beez.club/img/38x38xfavicon.png.pagespeed.ic.lvWi7wDCqW.png";
 	@Override
@@ -111,7 +110,7 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 			}
 		});
         
-        if(nomoreData) loadMore.setVisibility(View.GONE);
+        if(isLastPage) loadMore.setVisibility(View.GONE);
 	}
 	
 	protected void onShowListResponse(String data) {
@@ -139,8 +138,11 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 			JSONArray jsonItems = new JSONArray(strData);
 			if (jsonItems.length() <= 0) {
 				nomoreData = true;
+				isLastPage = true;
 				loadMore.setVisibility(View.GONE);
 				return;
+			} else {
+				nomoreData = false;
 			}
 			newsList = new ArrayList<NewsBeez>();
 			int current_length = (jsonItems.length() < concurrent + quota_display) ? jsonItems.length() : concurrent + quota_display;
@@ -183,9 +185,11 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 		} catch(Exception ex){
 			ex.printStackTrace();
 			nomoreData = true;
+			isLastPage = true;
 			loadMore.setVisibility(View.GONE);
 		}
-		if(nomoreData == true) loadMore.setVisibility(View.GONE);
+		if(isLastPage == true) loadMore.setVisibility(View.GONE);
+		page += nomoreData && !isLastPage ? 1 : 0;
 	}
 	
 	protected void onShowListErrorResponse(VolleyError error) {
@@ -196,7 +200,7 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 	protected void onButtonLoadMoreClick(View v){
 		AppController.getInstance().showProgressDialog(this);
 		NewsSourceApiClient apiClient = AppController.getInstance().getNewsApiClient();
-		apiClient.showListNews(new Response.Listener<String>() {
+		apiClient.showListNewsByPage(new Response.Listener<String>() {
 
 			@Override
 			public void onResponse(String data) {
@@ -214,7 +218,7 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 				
 			}
 			
-		});
+		}, page);
 	}
 	
 	@Override

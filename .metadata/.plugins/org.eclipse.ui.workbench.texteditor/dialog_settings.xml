@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="NewsBeezApiClient" key="selection"/>
+		<item value="app_gridview" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="cate_gridview"/>
+			<item value="SlidemenuAdapter"/>
+			<item value="&lt;TextView"/>
 			<item value="NewsBeezApiClient"/>
 			<item value="slidingmenu_item_toggle"/>
 			<item value="smoothScrollTo"/>
 			<item value="smoothScroll"/>
 			<item value="smoothScrollToPosition"/>
-			<item value="smooth"/>
-			<item value="smoo"/>
-			<item value="New"/>
 		</list>
 		<list key="replacehistory">
 			<item value="android.beez"/>
@@ -30,7 +30,7 @@
 		<item value="257" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="381" key="DIALOG_HEIGHT"/>
-		<item value="1026" key="DIALOG_X_ORIGIN"/>
-		<item value="205" key="DIALOG_Y_ORIGIN"/>
+		<item value="921" key="DIALOG_X_ORIGIN"/>
+		<item value="330" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

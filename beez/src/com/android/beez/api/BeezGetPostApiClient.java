@@ -53,4 +53,11 @@ public class BeezGetPostApiClient extends BaseNewsSourceApiClient{
 		return null;
 	}
 
+	@Override
+	public String showListNewsByPage(Listener<String> listener,
+			ErrorListener errorListener, int page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

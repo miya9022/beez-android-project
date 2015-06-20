@@ -40,4 +40,6 @@ public class Params {
 	public static final String RECOMMEND = "/recommend";
 	public static final String DATA_URl = "/data";
 	
+	//params for post/get
+	public static final String PAGE = "page";
 }

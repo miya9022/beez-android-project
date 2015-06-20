@@ -1,7 +1,10 @@
 package com.android.beez.api;
 
+import java.util.*;
+
 import com.android.beez.app.AppController;
 import com.android.beez.utils.Params;
+import com.android.volley.Request.Method;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
@@ -56,6 +59,23 @@ public class NewsBeezApiClient extends BaseNewsSourceApiClient {
 		AppController.getInstance().addToRequestQueue(req);
 		
 		return apiUri;
+	}
+
+	@Override
+	public String showListNewsByPage(Listener<String> listener, ErrorListener errorListener, final int page) {
+		StringBuilder sb = new StringBuilder(this.apiBaseUrl);
+		sb.append(Params.LISTPOST);
+		String apiUri = sb.toString();
+		
+		StringRequest req = new StringRequest(Method.POST, apiUri, listener, errorListener){
+			protected Map<String, String> getParams() throws com.android.volley.AuthFailureError{
+				Map<String, String> params = new HashMap<String, String>();
+				params.put(Params.PAGE, page == 0 ? "1" : Integer.toString(page));
+				return params;
+			};
+		};
+		AppController.getInstance().addToRequestQueue(req);
+		return null;
 	}
 	
 }

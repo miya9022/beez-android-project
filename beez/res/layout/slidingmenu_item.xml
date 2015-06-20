@@ -10,13 +10,7 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:background="@color/transparent" >
-
-        <ImageView
-            android:id="@+id/slidingmenu_item_thumb"
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical" />
-
+        
         <TextView
             android:id="@+id/slidingmenu_item_text"
             android:layout_width="fill_parent"
@@ -27,8 +21,14 @@
             android:textColor="@color/darkGray"
             android:textSize="18sp" />
         
+        <ImageView
+            android:id="@+id/slidingmenu_item_thumb"
+            android:layout_width="50dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center_vertical|end" />
+        
 
-        <!--  <ToggleButton
+          <!--<ToggleButton
             android:id="@+id/slidingmenu_item_toggle"
             android:layout_width="50dip"
             android:layout_height="30dip"

@@ -35,7 +35,7 @@ public class FavouriteActivity extends MenuActivity implements AbsListView.OnIte
 	private com.etsy.android.grid.StaggeredGridView gridView;
 	private ArrayList<NewsBeez> newsList;
 	private FavouriteAdapter adapter;
-	private int rank = 0;
+	private int page = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

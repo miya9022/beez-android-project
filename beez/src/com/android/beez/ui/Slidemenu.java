@@ -41,6 +41,7 @@ import com.android.beez.MenuActivity;
 import com.android.beez.NewsListActivity;
 import com.android.beez.R;
 import com.android.beez.SuggestActivity;
+import com.android.beez.adapter.AppAdapter;
 import com.android.beez.adapter.NewsAdapter;
 import com.android.beez.api.NewsSourceApiClient;
 import com.android.beez.app.AppController;
@@ -73,18 +74,21 @@ public class Slidemenu implements OnItemClickListener {
 			menuList.get(parentActivity.TAG).showMenu();
 		}
 	}
+
 	public void hideMenu() {
 		if (menuList.get(parentActivity.TAG) != null) {
 			menuList.get(parentActivity.TAG).toggle(true);
 		}
 	}
+
 	public boolean isShowMneu() {
 		if (menuList.get(parentActivity.TAG) != null) {
 			return menuList.get(parentActivity.TAG).isMenuShowing();
 		}
 		return false;
 	}
-	public  void clearMenuActivity(MenuActivity ac) {
+
+	public void clearMenuActivity(MenuActivity ac) {
 		menuList.remove(ac.TAG);
 	}
 
@@ -116,47 +120,50 @@ public class Slidemenu implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		TextView v = (TextView) view.findViewById(R.id.slidingmenu_item_text);
-		if("Home".equals(v.getTag().toString())){
-			Intent intent = new Intent(this.parentActivity, NewsListActivity.class);
+		if ("Home".equals(v.getTag().toString())) {
+			Intent intent = new Intent(this.parentActivity,
+					NewsListActivity.class);
 			parentActivity.startActivity(intent);
-		} else if("Favourite".equals(v.getTag().toString())){
-			Intent intent = new Intent(this.parentActivity, FavouriteActivity.class);
+		} else if ("Favourite".equals(v.getTag().toString())) {
+			Intent intent = new Intent(this.parentActivity,
+					FavouriteActivity.class);
 			parentActivity.startActivity(intent);
-		} else if("Suggest".equals(v.getTag().toString())){
-			Intent intent = new Intent(this.parentActivity, SuggestActivity.class);
+		} else if ("Suggest".equals(v.getTag().toString())) {
+			Intent intent = new Intent(this.parentActivity,
+					SuggestActivity.class);
 			parentActivity.startActivity(intent);
-		} 
-//		if ("PlayInBackground".equals(v.getTag().toString())) {
-//			// Do nothing
-//		} else if ("InviteFriend".equals(v.getTag().toString())) {
-//			Intent intent = new Intent(this.parentActivity,
-//					InviteActivity.class);
-//			intent.putExtra("back_stack_activity", this.parentActivity
-//					.getClass().getSimpleName());
-//			// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-//			// IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//			parentActivity.startActivity(intent);
-//			// parentActivity.finish();
-//			parentActivity.overridePendingTransition(R.anim.diagslide_enter,
-//					R.anim.diagslide_leave);
-//
-//		} else if ("ReviewApp".equals(v.getTag().toString())) {
-//			final String appPackageName = this.parentActivity.getPackageName();
-//			try {
-//				this.parentActivity.startActivity(new Intent(
-//						Intent.ACTION_VIEW, Uri.parse("market://details?id="
-//								+ appPackageName)));
-//			} catch (android.content.ActivityNotFoundException anfe) {
-//				this.parentActivity
-//						.startActivity(new Intent(
-//								Intent.ACTION_VIEW,
-//								Uri.parse("http://play.google.com/store/apps/details?id="
-//										+ appPackageName)));
-//			}
-//			parentActivity.overridePendingTransition(R.anim.diagslide_enter,
-//					R.anim.diagslide_leave);
-//		}
+		}
+		// if ("PlayInBackground".equals(v.getTag().toString())) {
+		// // Do nothing
+		// } else if ("InviteFriend".equals(v.getTag().toString())) {
+		// Intent intent = new Intent(this.parentActivity,
+		// InviteActivity.class);
+		// intent.putExtra("back_stack_activity", this.parentActivity
+		// .getClass().getSimpleName());
+		// // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+		// // IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+		//
+		// parentActivity.startActivity(intent);
+		// // parentActivity.finish();
+		// parentActivity.overridePendingTransition(R.anim.diagslide_enter,
+		// R.anim.diagslide_leave);
+		//
+		// } else if ("ReviewApp".equals(v.getTag().toString())) {
+		// final String appPackageName = this.parentActivity.getPackageName();
+		// try {
+		// this.parentActivity.startActivity(new Intent(
+		// Intent.ACTION_VIEW, Uri.parse("market://details?id="
+		// + appPackageName)));
+		// } catch (android.content.ActivityNotFoundException anfe) {
+		// this.parentActivity
+		// .startActivity(new Intent(
+		// Intent.ACTION_VIEW,
+		// Uri.parse("http://play.google.com/store/apps/details?id="
+		// + appPackageName)));
+		// }
+		// parentActivity.overridePendingTransition(R.anim.diagslide_enter,
+		// R.anim.diagslide_leave);
+		// }
 		// else if ("Exit".equals(v.getTag().toString())){
 		// AppController.getInstance().getSharedMem().put("app_exit", true);
 		//
@@ -179,36 +186,17 @@ public class Slidemenu implements OnItemClickListener {
 		this.parentActivity = parentActivity;
 	}
 
-	private class SlidemenuAdapter extends BaseExpandableListAdapter  {
+	private class SlidemenuAdapter extends BaseExpandableListAdapter {
 		private LayoutInflater inflater;
-		private String dataType;
-		
+
 		private Context context;
 		private ArrayList<MenuItem> data = new ArrayList<MenuItem>();
 		private HashMap<MenuItem, ArrayList<NewsBeez>> menu_child;
+		private AppAdapter adapter;
 
-		public SlidemenuAdapter(Context context, ArrayList<MenuItem> data, HashMap<MenuItem, ArrayList<String>> menu_child) {
-			super();
-			String menuItems[] = context.getResources().getStringArray(
-					R.array.slidingmenu_items);
-			String menuItemTags[] = context.getResources().getStringArray(
-					R.array.slidingmenu_item_tags);
-			String menuItemTypes[] = context.getResources().getStringArray(
-					R.array.slidingmenu_item_types);
-
-			this.inflater = LayoutInflater.from(context);
-			for (int i = 0; i < menuItems.length; i++) {
-				int type = MenuItem.TYPE_BUTTON;
-				if ("toggle".equals(menuItemTypes[i])) {
-					type = MenuItem.TYPE_TOGGLE;
-				} else if ("check".equals(menuItemTypes[i])) {
-					type = MenuItem.TYPE_CHECK;
-				} else {
-					type = MenuItem.TYPE_BUTTON;
-				}
-				data.add(new MenuItem(i, 0, menuItems[i], menuItemTags[i], type));
-			}
-		}
+		private ArrayList<NewsBeez> domainList;
+		private ArrayList<NewsBeez> cateList;
+		private GridView gridview;
 
 		private class MenuItem {
 			public final static int TYPE_TOGGLE = 1;
@@ -219,6 +207,7 @@ public class Slidemenu implements OnItemClickListener {
 			private int thumbIcon;
 			private String name;
 			private String tag;
+			private AppAdapter adapter;
 			private int type = TYPE_BUTTON;
 
 			public MenuItem(long id, int thumbIcon, String name, String tag,
@@ -229,6 +218,14 @@ public class Slidemenu implements OnItemClickListener {
 				this.name = name;
 				this.tag = tag;
 				this.type = type;
+			}
+
+			public AppAdapter getAdapter() {
+				return adapter;
+			}
+
+			public void setAdapter(AppAdapter adapter) {
+				this.adapter = adapter;
 			}
 
 			public int getThumbIcon() {
@@ -273,50 +270,56 @@ public class Slidemenu implements OnItemClickListener {
 				}
 				data.add(new MenuItem(i, 0, menuItems[i], menuItemTags[i], type));
 			}
-			NewsSourceApiClient apiClient = AppController.getInstance().getNewsApiClient();
+			NewsSourceApiClient apiClient = AppController.getInstance()
+					.getNewsApiClient();
 			apiClient.LoadDataById(new Response.Listener<String>() {
 
 				@Override
 				public void onResponse(String data) {
 					menu_child = new HashMap<MenuItem, ArrayList<NewsBeez>>();
-					try{
+					try {
 						JSONObject jsonObject = new JSONObject(data);
 						String code = jsonObject.getString("code");
-						if(Params.ERROR_10010.equals(code)){
-							ShowMessage.showDialogUpdateApp(getInstance().getParentActivity());
+						if (Params.ERROR_10010.equals(code)) {
+							ShowMessage.showDialogUpdateApp(getInstance()
+									.getParentActivity());
 							return;
 						}
 						if (!"OK".equals(code)) {
 							return;
 						}
-						
+
 						String strData = jsonObject.getString(Params.DATA);
-						if(strData == null){
+						if (strData == null) {
 							return;
 						}
-						
+
 						JSONObject jsonItemsObject = new JSONObject(strData);
 						String strSite = jsonItemsObject.getString(Params.SITE);
-						if(strSite == null){
+						if (strSite == null) {
 							return;
 						}
-						
-						String strCategory = jsonItemsObject.getString(Params.CATEGORY);
-						if(strCategory == null){
+
+						String strCategory = jsonItemsObject
+								.getString(Params.CATEGORY);
+						if (strCategory == null) {
 							return;
 						}
-						
+
 						JSONArray jsonItemsCate = new JSONArray(strCategory);
 						if (jsonItemsCate.length() <= 0) {
 							return;
 						}
-						ArrayList<NewsBeez> cateList = new ArrayList<NewsBeez>();
-						for(int i = 0; i < jsonItemsCate.length(); i++){
+						cateList = new ArrayList<NewsBeez>();
+						for (int i = 0; i < jsonItemsCate.length(); i++) {
 							JSONObject jobject = jsonItemsCate.getJSONObject(i);
 							NewsBeez cate_beez = new NewsBeez();
-							cate_beez.setId(jobject.optString(Params.ID, "NULL"));
-							cate_beez.setTitle(jobject.optString(Params.TITLE, "NULL"));
-							cate_beez.setName(jobject.optString(Params.NAME, "NULL"));
+							cate_beez.setId(jobject
+									.optString(Params.ID, "NULL"));
+							cate_beez.setTitle(jobject.optString(Params.TITLE,
+									"NULL"));
+							cate_beez.setName(jobject.optString(Params.NAME,
+									"NULL"));
 							cate_beez.setCate(true);
 							cateList.add(cate_beez);
 						}
@@ -324,34 +327,41 @@ public class Slidemenu implements OnItemClickListener {
 						if (jsonItemsDomain.length() <= 0) {
 							return;
 						}
-						ArrayList<NewsBeez> domainList = new ArrayList<NewsBeez>();
-						for(int i = 0; i < jsonItemsDomain.length(); i++){
-							JSONObject jobject = jsonItemsDomain.getJSONObject(i);
+						domainList = new ArrayList<NewsBeez>();
+						for (int i = 0; i < jsonItemsDomain.length(); i++) {
+							JSONObject jobject = jsonItemsDomain
+									.getJSONObject(i);
 							NewsBeez domain_beez = new NewsBeez();
-							domain_beez.setId(jobject.optString(Params.ID, "NULL"));
-							domain_beez.setName(jobject.optString(Params.NAME, "NULL"));
-							domain_beez.setApp_id(jobject.optString(Params.APP_ID, "NULL"));
-							domain_beez.setApp_domain(jobject.optString(Params.APP_DOMAIN, "NULL"));
+							domain_beez.setId(jobject.optString(Params.ID,
+									"NULL"));
+							domain_beez.setName(jobject.optString(Params.NAME,
+									"NULL"));
+							domain_beez.setApp_id(jobject.optString(
+									Params.APP_ID, "NULL"));
+							domain_beez.setApp_domain(jobject.optString(
+									Params.APP_DOMAIN, "NULL"));
 							domain_beez.setCate(false);
 							domainList.add(domain_beez);
 						}
-						menu_child.put(SlidemenuAdapter.this.data.get(3), domainList);
-						menu_child.put(SlidemenuAdapter.this.data.get(4), cateList);
-					} catch(Exception ex){
+						menu_child.put(SlidemenuAdapter.this.data.get(3),
+								domainList);
+						menu_child.put(SlidemenuAdapter.this.data.get(4),
+								cateList);
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
-				
 			}, new Response.ErrorListener() {
 
 				@Override
 				public void onErrorResponse(VolleyError arg0) {
-					
+
 				}
-				
+
 			});
+
 		}
-		
+
 		@Override
 		public int getGroupCount() {
 			return this.data.size();
@@ -359,7 +369,7 @@ public class Slidemenu implements OnItemClickListener {
 
 		@Override
 		public int getChildrenCount(int groupPosition) {
-			return this.menu_child == null ? 0 : this.menu_child.get(this.data.get(groupPosition)).size();
+			return this.menu_child == null ? 0 : 1;
 		}
 
 		@Override
@@ -369,7 +379,7 @@ public class Slidemenu implements OnItemClickListener {
 
 		@Override
 		public Object getChild(int groupPosition, int childPosition) {
-			return this.menu_child.get(this.data.get(groupPosition)).get(childPosition);
+			return this.menu_child.get(this.data.get(groupPosition));
 		}
 
 		@Override
@@ -388,7 +398,9 @@ public class Slidemenu implements OnItemClickListener {
 		}
 
 		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		public View getGroupView(final int groupPosition,
+				final boolean isExpanded, View convertView,
+				final ViewGroup parent) {
 			View view = convertView;
 			SlidingmenuItemHolder holder = null;
 			final MenuItem item = data.get(groupPosition);
@@ -399,162 +411,132 @@ public class Slidemenu implements OnItemClickListener {
 						.findViewById(R.id.slidingmenu_item_text);
 				holder.image = (ImageView) view
 						.findViewById(R.id.slidingmenu_item_thumb);
-				
+
 				view.setTag(holder);
 			} else {
 				holder = (SlidingmenuItemHolder) view.getTag();
 			}
-			
+
 			holder.text.setText(item.getName());
 			holder.text.setTag(item.getTag());
 			holder.text.setOnClickListener(new View.OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					if("Home".equals(v.getTag().toString())){
-						Intent intent = new Intent(getParentActivity(), NewsListActivity.class);
+					if ("Home".equals(v.getTag().toString())) {
+						Intent intent = new Intent(getParentActivity(),
+								NewsListActivity.class);
 						parentActivity.startActivity(intent);
-					} else if("Favourite".equals(v.getTag().toString())){
-						Intent intent = new Intent(getParentActivity(), FavouriteActivity.class);
+					} else if ("Favourite".equals(v.getTag().toString())) {
+						Intent intent = new Intent(getParentActivity(),
+								FavouriteActivity.class);
 						parentActivity.startActivity(intent);
-					} else if("Suggest".equals(v.getTag().toString())){
-						Intent intent = new Intent(getParentActivity(), SuggestActivity.class);
+					} else if ("Suggest".equals(v.getTag().toString())) {
+						Intent intent = new Intent(getParentActivity(),
+								SuggestActivity.class);
 						parentActivity.startActivity(intent);
-					} 
+					}
 				}
-				
-			});
 
-			holder.image.setBackgroundResource(item.getThumbIcon());
-			holder.image.setTag(item.getTag());
+			});
+			if ("App_domain".equals(item.getTag().toString()) || "Category".equals(item.getTag().toString())) {
+				int imageResourceId = isExpanded ? R.drawable.arrow_down
+						: R.drawable.arrow_right;
+				holder.image.setImageResource(imageResourceId);
+				holder.image.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (isExpanded) ((ExpandableListView) parent).collapseGroup(groupPosition);
+						else ((ExpandableListView) parent).expandGroup(groupPosition, true);
+					}
+				});
+				// holder.image.setBackgroundResource(item.getThumbIcon());
+				holder.image.setTag(item.getTag());
+				Toast.makeText(getParentActivity().getApplicationContext(),
+						Integer.toString(groupPosition), Toast.LENGTH_LONG)
+						.show();
+			} else {
+				holder.image.setVisibility(View.GONE);
+			}
+
 			return view;
 		}
 
 		@Override
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
-			View view = convertView;
-			SlidingmenuItemHolder holder = null;
-			final NewsBeez dataItem = (NewsBeez) getChild(groupPosition, childPosition);
-			if(view == null){
-				view = inflater.inflate(R.layout.item_gv_app, null);
-				holder = new SlidingmenuItemHolder();
-				holder.text = (TextView) view.findViewById(R.id.app_domain_item_text);
-				view.setTag(holder);
-			} else {
-				holder = (SlidingmenuItemHolder) view.getTag();
+			// if (groupPosition >= 3) {
+
+			View item = convertView;
+			if (item == null) {
+				item = inflater.inflate(R.layout.item_gv_app, null);
 			}
-			holder.text.setText(dataItem.getName());
-			holder.text.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					Intent i = new Intent(getParentActivity(), ListNewsByDataActivity.class);
-					if(dataItem.isCate() == false){
-						i.putExtra(Params.DATA_TYPE, "domain");
-						i.putExtra(Params.ID, dataItem.getId());
-						i.putExtra(Params.NAME, dataItem.getName());
-						i.putExtra(Params.APP_ID, dataItem.getApp_id());
-						i.putExtra(Params.APP_DOMAIN, dataItem.getApp_domain());
-					} else {
-						i.putExtra(Params.DATA_TYPE, "category");
-						i.putExtra(Params.ID, dataItem.getId());
-						i.putExtra(Params.TITLE, dataItem.getTitle());
-						i.putExtra(Params.NAME, dataItem.getName());
-					}
-					getParentActivity().startActivity(i);
+			gridview = (GridView) item.findViewById(R.id.app_gridview);
+			gridview.setNumColumns(2);
+			gridview.setHorizontalSpacing(10);
+			AppAdapter adapter = null;
+			if(groupPosition == 3){
+				adapter = new AppAdapter(parent.getContext(), domainList);
+			} else if(groupPosition == 4){
+				adapter = new AppAdapter(parent.getContext(), cateList);
+			} else {
+				item = null;
+			}
+			if(groupPosition >= 3){
+				gridview.setAdapter(adapter);
+				int totalHeight = 0;
+				for (int size = 0; size < adapter.getCount(); size++) {
+					RelativeLayout relativeLayout = (RelativeLayout) adapter
+							.getView(size, null, gridview);
+					TextView textView = (TextView) relativeLayout.getChildAt(0);
+					textView.measure(0, 0);
+					totalHeight += textView.getMeasuredHeight();
 				}
-			});
-			return view;
+				ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) gridview
+						.getLayoutParams();
+				if (params != null) {
+					params.height = totalHeight-20;
+				}
+			}
+			return item;
+		}
+
+		private ViewGroup getViewGroupChild(View convertView, ViewGroup parent,
+				int resourceId) {
+			// The parent will be our ListView from the ListActivity
+			if (convertView instanceof ViewGroup) {
+				return (ViewGroup) convertView;
+			}
+			Context context = parent.getContext();
+			LayoutInflater inflater = LayoutInflater.from(context);
+			ViewGroup item = (ViewGroup) inflater.inflate(resourceId, null);
+			return item;
 		}
 
 		@Override
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			return true;
 		}
+		//
+		// SharedPreferences shared = AppController.getInstance()
+		// .getSharedPreferences();
+		// if (item.getType() == MenuItem.TYPE_TOGGLE) {
+		// holder.toggle
+		// .setChecked(shared.getBoolean(item.getTag(), true));
+		// holder.toggle.setTag(item.getTag());
+		// } else if (item.getType() == MenuItem.TYPE_CHECK) {
+		// holder.check
+		// .setSelected(shared.getBoolean(item.getTag(), true));
+		// holder.check.setTag(item.getTag());
+		// }
 
-//		@Override
-//		public int getCount() {
-//			return data.size();
-//		}
-//
-//		@Override
-//		public Object getItem(int position) {
-//			return data.get(position);
-//		}
-//
-//		@Override
-//		public long getItemId(int position) {
-//			return ((MenuItem) getItem(position)).getId();
-//		}
-//
-//		@Override
-//		public View getView(int position, View convertView, ViewGroup parent) {
-//			View view = convertView;
-//			SlidingmenuItemHolder holder = null;
-//
-//			final MenuItem item = data.get(position);
-//
-//			if (view == null) {
-//				holder = new SlidingmenuItemHolder();
-//				view = inflater.inflate(R.layout.slidingmenu_item, null);
-//				holder.text = (TextView) view
-//						.findViewById(R.id.slidingmenu_item_text);
-//				holder.image = (ImageView) view
-//						.findViewById(R.id.slidingmenu_item_thumb);
-//				holder.toggle = (ToggleButton) view
-//						.findViewById(R.id.slidingmenu_item_toggle);
-//				holder.gridview = (CustomGridView) view
-//						.findViewById(R.id.app_domain_gv);
-//				if (item.getType() == MenuItem.TYPE_TOGGLE) {
-//					holder.toggle.setVisibility(View.VISIBLE);
-//					holder.gridview.setVisibility(View.VISIBLE);
-//					boolean val = holder.toggle.isChecked();
-//					if(val == false){
-//						onLoadCate(view);
-//					}
-//				} else {
-//					holder.toggle.setVisibility(View.GONE);
-//					holder.gridview.setVisibility(View.GONE);
-//				}
-//				holder.toggle.setOnClickListener(new View.OnClickListener() {
-//					@Override
-//					public void onClick(View v) {
-//						
-//					}
-//				});
-//				view.setTag(holder);
-//			} else {
-//				holder = (SlidingmenuItemHolder) view.getTag();
-//			}
-//
-//			holder.text.setText(item.getName());
-//			holder.text.setTag(item.getTag());
-//
-//			holder.image.setBackgroundResource(item.getThumbIcon());
-//			holder.image.setTag(item.getTag());
-//
-//			SharedPreferences shared = AppController.getInstance()
-//					.getSharedPreferences();
-//			if (item.getType() == MenuItem.TYPE_TOGGLE) {
-//				holder.toggle
-//						.setChecked(shared.getBoolean(item.getTag(), true));
-//				holder.toggle.setTag(item.getTag());
-//			} else if (item.getType() == MenuItem.TYPE_CHECK) {
-//				holder.check
-//						.setSelected(shared.getBoolean(item.getTag(), true));
-//				holder.check.setTag(item.getTag());
-//			}
-//
-//			return view;
-//		}
-
-		
 	}
 
 	private static class SlidingmenuItemHolder {
 		TextView text;
 		ImageView image;
+		GridView gridview;
 		ToggleButton toggle;
 		CheckBox check;
 	}

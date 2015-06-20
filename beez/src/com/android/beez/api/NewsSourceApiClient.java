@@ -13,4 +13,7 @@ public interface NewsSourceApiClient {
 	
 	//load data(app_id, cate_id) by Id
 	public String LoadDataById(Listener<String> listener, Response.ErrorListener errorlistener);
+	
+	// show news by page
+	public String showListNewsByPage(Listener<String> listener, Response.ErrorListener errorListener, int page);
 }

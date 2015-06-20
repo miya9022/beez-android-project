@@ -6,6 +6,7 @@ import java.util.Queue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.android.beez.adapter.FavouriteAdapter;
 import com.android.beez.adapter.NewsAdapter;
 import com.android.beez.api.NewsSourceApiClient;
 import com.android.beez.app.AppController;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -37,7 +39,7 @@ public class ListNewsByDataActivity extends MenuActivity implements AbsListView.
 	private com.etsy.android.grid.StaggeredGridView gridView;
 	
 	private Button loadMore;
-	private NewsAdapter adapter = null;
+	private FavouriteAdapter adapter = null;
 	private ArrayList<NewsBeez> newsList = null;
 	private int quota_display = AppController.getInstance().getDisplayQuota();
 	private Queue<NewsBeez> QueueDisplay = null;
@@ -173,7 +175,7 @@ public class ListNewsByDataActivity extends MenuActivity implements AbsListView.
 						boolean cate_contained = false;
 						int a = 0;
 						while(a < cate_ids.length){
-							if(cate_ids[a].trim().equals(id)){
+							if(id.equals(cate_ids[a].trim())){
 								cate_contained = true;
 								break;
 							}
@@ -185,7 +187,7 @@ public class ListNewsByDataActivity extends MenuActivity implements AbsListView.
 							}
 						}
 					} else if("domain".equals(dataType)){
-						if(news.getApp_domain().equals(app_domain_head)){
+						if(app_domain_head.equals(news.getApp_domain())){
 							if(newsList.size() < quota_display){
 								newsList.add(news);
 							}
@@ -197,7 +199,7 @@ public class ListNewsByDataActivity extends MenuActivity implements AbsListView.
 			}
 			concurrent = (nomoreData == false) ? current_length : 0;
 			if(adapter == null){
-				adapter = new NewsAdapter(this, newsList, false);
+				adapter = new FavouriteAdapter(this, newsList);
 				gridView.setAdapter(adapter); 
 			} else {
 				if (newsList.size() > 0) {
@@ -278,6 +280,9 @@ public class ListNewsByDataActivity extends MenuActivity implements AbsListView.
 		i.putExtra(Params.APP_DOMAIN, entry.getApp_domain());
 		i.putExtra(Params.TIME, entry.getTime());
 		i.putExtra(Params.VIEW, entry.getView());
+		i.putExtra(Params.ID,entry.getId());
+		i.putExtra(Params.ORIGIN_URL, entry.getOrigin_url());
+		Toast.makeText(getApplicationContext(), entry.getOrigin_url(), Toast.LENGTH_LONG).show();
 		startActivity(i);
 	}
 }
