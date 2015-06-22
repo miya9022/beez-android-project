@@ -48,7 +48,6 @@ public class NewsListActivity extends MenuActivity implements InterstitialAds.On
 	private NewsAdapter adapter = null;
 	private ArrayList<NewsBeez> newsList = null;
 	private int quota_display = AppController.getInstance().getDisplayQuota();
-	private Queue<NewsBeez> QueueDisplay = null;
 	private int concurrent = 0;
 	
 	private boolean isLastPage = false;

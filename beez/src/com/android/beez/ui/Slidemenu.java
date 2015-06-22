@@ -398,9 +398,7 @@ public class Slidemenu implements OnItemClickListener {
 		}
 
 		@Override
-		public View getGroupView(final int groupPosition,
-				final boolean isExpanded, View convertView,
-				final ViewGroup parent) {
+		public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, final ViewGroup parent) {
 			View view = convertView;
 			SlidingmenuItemHolder holder = null;
 			final MenuItem item = data.get(groupPosition);
@@ -440,8 +438,7 @@ public class Slidemenu implements OnItemClickListener {
 
 			});
 			if ("App_domain".equals(item.getTag().toString()) || "Category".equals(item.getTag().toString())) {
-				int imageResourceId = isExpanded ? R.drawable.arrow_down
-						: R.drawable.arrow_right;
+				int imageResourceId = isExpanded ? R.drawable.arrow_down : R.drawable.arrow_right;
 				holder.image.setImageResource(imageResourceId);
 				holder.image.setOnClickListener(new View.OnClickListener() {
 
@@ -453,9 +450,9 @@ public class Slidemenu implements OnItemClickListener {
 				});
 				// holder.image.setBackgroundResource(item.getThumbIcon());
 				holder.image.setTag(item.getTag());
-				Toast.makeText(getParentActivity().getApplicationContext(),
-						Integer.toString(groupPosition), Toast.LENGTH_LONG)
-						.show();
+//				Toast.makeText(getParentActivity().getApplicationContext(),
+//						Integer.toString(groupPosition), Toast.LENGTH_LONG)
+//						.show();
 			} else {
 				holder.image.setVisibility(View.GONE);
 			}
@@ -464,8 +461,7 @@ public class Slidemenu implements OnItemClickListener {
 		}
 
 		@Override
-		public View getChildView(int groupPosition, int childPosition,
-				boolean isLastChild, View convertView, ViewGroup parent) {
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 			// if (groupPosition >= 3) {
 
 			View item = convertView;
@@ -499,18 +495,6 @@ public class Slidemenu implements OnItemClickListener {
 					params.height = totalHeight-20;
 				}
 			}
-			return item;
-		}
-
-		private ViewGroup getViewGroupChild(View convertView, ViewGroup parent,
-				int resourceId) {
-			// The parent will be our ListView from the ListActivity
-			if (convertView instanceof ViewGroup) {
-				return (ViewGroup) convertView;
-			}
-			Context context = parent.getContext();
-			LayoutInflater inflater = LayoutInflater.from(context);
-			ViewGroup item = (ViewGroup) inflater.inflate(resourceId, null);
 			return item;
 		}
 

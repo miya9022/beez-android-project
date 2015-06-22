@@ -18,5 +18,14 @@
         app:column_count="2"
         app:item_margin="6dp" >
     </com.etsy.android.grid.StaggeredGridView>
+    
+    <ImageButton
+        android:id="@+id/scroll_top_favour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/ic_scrolltop" />
 
 </RelativeLayout>
